@@ -1,0 +1,7 @@
+extends ../layout
+
+block content
+  form(action="/seed/users", method="post")
+    input.btn.btn-primary(type="submit", value="Adicionar Usuários")
+  form(action="/seed/friends", method="post")
+    input.btn.btn-primary(type="submit", value="Adicionar Amigos")
