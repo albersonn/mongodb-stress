@@ -22,7 +22,6 @@ coverage
 
 # Uglify tmp folder
 .tmp
-
 # node-waf configuration
 .lock-wscript
 
