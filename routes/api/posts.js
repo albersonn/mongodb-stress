@@ -38,6 +38,86 @@ router.post('/populate/exceptional', (req, res, next) => {
 		})
 })
 
+router.post('/populate/large', (req, res, next) => {
+	usersApi.large()
+		.then(users => {
+			const ps = [];
+			for(let i = 0; i < users.length; i++) {
+				for(let x = 0; x < 100; x++) {
+					ps.push(postsApi.add(users[i], loremIpsum()));
+				}
+			}
+			return Promise.all(ps)
+		})
+		.then(() => {
+			return res.sendStatus(200).end();
+		})
+		.catch(err => {
+			console.error(err);
+			return res.send(err).status(500).end();
+		})
+})
+
+router.post('/populate/power', (req, res, next) => {
+	usersApi.power()
+		.then(users => {
+			const ps = [];
+			for(let i = 0; i < users.length; i++) {
+				for(let x = 0; x < 100; x++) {
+					ps.push(postsApi.add(users[i], loremIpsum()));
+				}
+			}
+			return Promise.all(ps)
+		})
+		.then(() => {
+			return res.sendStatus(200).end();
+		})
+		.catch(err => {
+			console.error(err);
+			return res.send(err).status(500).end();
+		})
+})
+
+router.post('/populate/avg', (req, res, next) => {
+	usersApi.avg()
+		.then(users => {
+			const ps = [];
+			for(let i = 0; i < users.length; i++) {
+				for(let x = 0; x < 100; x++) {
+					ps.push(postsApi.add(users[i], loremIpsum()));
+				}
+			}
+			return Promise.all(ps)
+		})
+		.then(() => {
+			return res.sendStatus(200).end();
+		})
+		.catch(err => {
+			console.error(err);
+			return res.send(err).status(500).end();
+		})
+})
+
+router.post('/populate/low', (req, res, next) => {
+	usersApi.low()
+		.then(users => {
+			const ps = [];
+			for(let i = 0; i < users.length; i++) {
+				for(let x = 0; x < 100; x++) {
+					ps.push(postsApi.add(users[i], loremIpsum()));
+				}
+			}
+			return Promise.all(ps)
+		})
+		.then(() => {
+			return res.sendStatus(200).end();
+		})
+		.catch(err => {
+			console.error(err);
+			return res.send(err).status(500).end();
+		})
+})
+
 router.post('/populate', (req, res, next) => {
 	usersApi.list()
 		.then(users => {

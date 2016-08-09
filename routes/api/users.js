@@ -20,7 +20,9 @@ router.post('/:userId/:friendId', (req, res, next) => {
 router.get('/:userId/timeline/:skip/:limit', (req, res, next) => {
   api.timeline(req.params.userId, req.params.skip, req.params.limit)
     .then(timeline => {
+      console.log(timeline.length);
       res.setHeader('count', timeline.length);
+      // res.sendStatus(200);
       return res.json(timeline);
     })
     .catch(err => {

@@ -49,6 +49,18 @@ const api = {
   exceptional: () => {
     return User.find({category: 'exceptional'}).lean().exec();
   },
+  large: () => {
+    return User.find({category: 'large'}).lean().exec();
+  },
+  power: () => {
+    return User.find({category: 'power'}).lean().exec();
+  },
+  avg: () => {
+    return User.find({category: 'avg'}).lean().exec();
+  },
+  low: () => {
+    return User.find({category: 'low'}).lean().exec();
+  },
   updateCategory: (userId, category) => {
     return User.findOneAndUpdate({_id : userId}, { category }).exec();
   },
@@ -135,13 +147,14 @@ const api = {
 
     return User.findById(userId).lean()
       .then(user => {
-        return Post.find({
+        const q = Post.find({
           'author': {
             $in: user.friends
           }
-        }).sort({
-          date: -1
-        }).skip(skip).limit(limit).lean().exec();
+        }).skip(skip);
+        if (limit >= 0)
+          q.limit(limit);
+        return q.lean().exec();
       })
   }
 }
