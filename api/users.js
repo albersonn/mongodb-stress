@@ -1,7 +1,14 @@
 const User = require('../models').User;
 const Post = require('../models').Post;
+const ObjectId = require('mongoose').Types.ObjectId;
 const Promise = require('bluebird');
 const _ = require('lodash');
+const opt = {
+  friends: 0,
+  createdAt: 0,
+  updatedAt: 0,
+  __v: 0
+}
 
 function _addFriendship(user, friendsName) {
   return User.find({
@@ -67,7 +74,7 @@ const api = {
   get: (userId) => {
     return User.findOne({
       _id: userId
-    }).lean().exec();
+    }, opt).lean().exec();
   },
   getByName: (userName) => {
     return User.findOne({
@@ -75,6 +82,45 @@ const api = {
         $eq: userName
       }
     }).lean().exec();
+  },
+  search: (query, ultimoId) => {
+    if ('undefined' === typeof(ultimoId)) {
+      return User.aggregate(
+      {
+        $match: {
+          name: { $regex: query }
+        }
+      },
+      {
+        $project: {
+          name: '$name',
+          friends: { $size: '$friends'},
+          category: '$category'
+        }
+      },
+      {
+        $limit: 10
+      });
+    } else {
+      return User.aggregate(
+      {
+        $match: {
+          name: { $regex: query },
+          _id: { $gt: ObjectId(ultimoId)}
+        }
+      },
+      {
+        $project: {
+          name: '$name',
+          friends: { $size: '$friends'},
+          category: '$category'
+        }
+      },
+      {
+        $limit: 10
+      });
+    }
+    // return User.find(, opt).limit(10).lean().exec();
   },
   add: (user) => {
     const newUser = new User(user);
@@ -90,8 +136,8 @@ const api = {
   delete: (user) => {
     return User.findOneAndDelete(user._id).exec();
   },
-  friends: (user) => {
-    return User.find(user)
+  friends: (userId) => {
+    return User.findById(userId, { _id:0, friends: 1}).exec();
   },
   addFriendships: (objUser, friendsNames) => {
     return Promise.all([
