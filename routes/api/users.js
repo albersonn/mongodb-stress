@@ -21,7 +21,6 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 router.get('/search', (req, res, next) => {
   const query = req.query.q;
-  console.log(req.query);
   if(isUndefined(query))
     return res.status(400).end();
   const ultimoId = req.query.l;
@@ -63,7 +62,6 @@ router.get('/:userId/friends', (req, res, next) => {
 router.get('/:userId/timeline/:skip/:limit', (req, res, next) => {
   api.timeline(req.params.userId, req.params.skip, req.params.limit)
     .then(timeline => {
-      console.log(timeline.length);
       res.setHeader('count', timeline.length);
       // res.sendStatus(200);
       return res.json(timeline);
