@@ -4,13 +4,15 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const PostsSchema = new Schema({
-    date: Date,
-    content: String,
-    author: {
-        type: ObjectId,
-        ref: 'users'
-    }
-}, { timestamps: true });
+  date: Date,
+  content: String,
+  author: {
+    type: ObjectId,
+    ref: 'users',
+  },
+}, {
+  timestamps: true,
+});
 
 mongoose.model('posts', PostsSchema);
 

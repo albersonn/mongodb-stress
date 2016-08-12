@@ -3,22 +3,30 @@ const Post = require('../models').Post;
 
 const api = {};
 
-api.list = () => {
-	return Post.find().lean().exec();
+const start = moment().add(-3, 'y').toDate();
+const end = moment().toDate();
+
+function randomDate() {
+  return new Date(start.getTime() + (Math.random() * (end.getTime() - start.getTime())));
 }
 
-api.add = (author, content, date) => {
-	if ('undefined' === typeof(date))
-		date = moment();
-	if ('null' === typeof(date))
-		date = moment();
+api.list = () => Post.find().lean().exec();
 
-	var newPost = new Post({
-		date,
-		content,
-		author
-	});
-	return newPost.save();
-}
+api.add = (author, content, pDate) => {
+  let date = pDate;
+  if (typeof (date) === 'undefined') {
+    date = randomDate();
+  }
+  if (!date) {
+    date = randomDate();
+  }
+
+  const newPost = new Post({
+    date,
+    content,
+    author,
+  });
+  return newPost.save();
+};
 
 module.exports = api;

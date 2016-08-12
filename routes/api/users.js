@@ -1,8 +1,8 @@
 const express = require('express');
+
 const router = express.Router();
+
 const api = require('../../api/users');
-const postclient = require('../../postclient');
-const Promise = require('bluebird');
 const isUndefined = require('lodash').isUndefined;
 const ObjectId = require('mongoose').Types.ObjectId;
 
@@ -19,47 +19,44 @@ const ObjectId = require('mongoose').Types.ObjectId;
 //     })
 // });
 
-router.get('/search', (req, res, next) => {
+/* eslint-disable consistent-return*/
+router.get('/search', (req, res) => {
   const query = req.query.q;
-  if(isUndefined(query))
+  if (isUndefined(query)) {
     return res.status(400).end();
+  }
   const ultimoId = req.query.l;
   api.search(query, ultimoId)
-    .then(results => {
-      res.json(results);
-    })
-    .catch(err => {
-      return res.status(500).send(err).end();
-    })
-})
+    .then(results => res.json(results))
+    .catch(err => res.status(500).send(err).end());
+});
+/* eslint-enable */
 
-router.get('/:userId', (req, res, next) => {
+/* eslint-disable consistent-return*/
+router.get('/:userId', (req, res) => {
   const userId = req.params.userId;
-  if(!ObjectId.isValid(userId))
+  if (!ObjectId.isValid(userId)) {
     return res.status(400).end();
+  }
   api.get(userId)
-    .then(user => {
-      return res.json(user);
-    })
-    .catch(err => {
-      return res.status(500).send(err).end();
-    })
-})
+    .then(user => res.json(user))
+    .catch(err => res.status(500).send(err).end());
+});
+/* eslint-enable */
 
-router.get('/:userId/friends', (req, res, next) => {
+/* eslint-disable consistent-return*/
+router.get('/:userId/friends', (req, res) => {
   const userId = req.params.userId;
-  if(!ObjectId.isValid(userId))
+  if (!ObjectId.isValid(userId)) {
     return res.status(400).end();
+  }
   api.friends(userId)
-    .then(friends => {
-      return res.json(friends)
-    })
-    .catch(err => {
-      return res.status(500).send(err).end();
-    })
-})
+    .then(friends => res.json(friends))
+    .catch(err => res.status(500).send(err).end());
+});
+/* eslint-enable */
 
-router.get('/:userId/timeline/:skip/:limit', (req, res, next) => {
+router.get('/:userId/timeline/:skip/:limit', (req, res) => {
   api.timeline(req.params.userId, req.params.skip, req.params.limit)
     .then(timeline => {
       res.setHeader('count', timeline.length);
@@ -69,8 +66,8 @@ router.get('/:userId/timeline/:skip/:limit', (req, res, next) => {
     .catch(err => {
       console.error(err);
       return res.send(err).status(500).end();
-    })
-})
+    });
+});
 
 // router.post('/categorias', (req, res, next) => {
 //   api.list()
