@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports = () => {
-  mongoose.connect('mongodb://alberson:alberson@localhost:27017/social');
+  mongoose.connect(process.env.MONGODB_URI || 'mongodb://alberson:alberson@localhost:27017/social');
   // CONNECTION EVENTS
   // When successfully connected
   mongoose.connection.on('connected', () => {
