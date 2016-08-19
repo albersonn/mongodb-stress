@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const Promise = require('bluebird');
 const loremIpsum = require('lorem-ipsum');
 const express = require('express');

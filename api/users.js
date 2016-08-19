@@ -115,11 +115,13 @@ const api = {
 
     // return User.find(, opt).limit(10).lean().exec();
   },
+  /* eslint-disable no-console */
   add: (user) => {
     const newUser = new User(user);
     console.log(`adding user ${newUser.name}`);
     return newUser.save();
   },
+  /* eslint-enable */
   addAll: (users, callback) =>
     User.insertMany(users, callback),
   update: (user) =>
